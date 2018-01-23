@@ -38,7 +38,7 @@ public class ControllerAspect {
     private HttpServletRequest request;
 
     @Around("execution(* com.company.project.web.controller..*(..))")
-    public Object checkParams(ProceedingJoinPoint pjp)
+    public Object requestPointCut(ProceedingJoinPoint pjp)
             throws Throwable {
         MDC.put("traceId", UUID.randomUUID());
         Stopwatch watch = Stopwatch.createStarted();
@@ -50,6 +50,19 @@ public class ControllerAspect {
 
         return wrapObject(watch, pjp.proceed());
     }
+
+
+    @Around("execution(* com.company.project.web.exception..*(..)) ")
+    public Object exceptionPointCut(ProceedingJoinPoint pjp)
+            throws Throwable {
+        MDC.put("traceId", UUID.randomUUID());
+        Map<String, String> httpParams = parseHttpParams(request.getParameterMap());
+        Object result =  pjp.proceed();
+        log.error("error [{}:{}],request:{},response:{} ", WebUtil.getRealIpAddr(request), request.getServletPath(),httpParams,
+                result );
+        return result;
+    }
+
 
 
 
