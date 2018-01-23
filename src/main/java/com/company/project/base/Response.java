@@ -1,5 +1,6 @@
 package com.company.project.base;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 /**
@@ -10,6 +11,7 @@ public class Response<T> {
 
     private int code;
     private String msg = "";
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
 
 
@@ -57,8 +59,8 @@ public class Response<T> {
         return fail(null);
     }
 
-    public static <T> Response<T> fail(T data) {
-        return new Response<>(ResponseCodeEnum.FAIL, data);
+    public static <T> Response<T> fail(String msg) {
+        return new Response<>(ResponseCodeEnum.FAIL.code(), msg,null);
     }
 
     public static <T> Response<T> fail(String msg, T data) {
@@ -70,13 +72,12 @@ public class Response<T> {
         return serverError(null);
     }
 
-    public static <T> Response<T> serverError(T data) {
-        return new Response<>(ResponseCodeEnum.SERVER_ERROR, data);
+    public static <T> Response<T> serverError(String msg) {
+        return new Response<>(ResponseCodeEnum.SERVER_ERROR.code(), msg, null);
     }
 
     public static <T> Response<T> serverError(String msg, T data) {
         return new Response<>(ResponseCodeEnum.SERVER_ERROR.code(), msg, data);
     }
-
 
 }
