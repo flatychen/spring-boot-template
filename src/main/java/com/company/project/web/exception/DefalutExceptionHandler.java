@@ -48,16 +48,6 @@ public class DefalutExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Response<? extends Object> handleException(
             Exception ex) {
-        if (ex instanceof BindException) {
-            BindException e = (BindException) ex;
-            log.warn("BindException:{}", ex.getMessage());
-            return Response.fail(e.getMessage());
-        }
-        if (ex instanceof MissingServletRequestParameterException) {
-            MissingServletRequestParameterException e = (MissingServletRequestParameterException) ex;
-            log.warn("MissingServletRequestParameterException:{}", ex.getMessage());
-            return Response.fail(e.getMessage());
-        }
         log.error("Exception", ex);
         return Response.serverError();
     }
