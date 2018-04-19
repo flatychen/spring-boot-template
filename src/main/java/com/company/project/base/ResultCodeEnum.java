@@ -4,7 +4,7 @@ package com.company.project.base;
 /**
  * 响应码枚举，参考HTTP状态码的语义
  */
-public enum ResponseCodeEnum {
+public enum ResultCodeEnum {
     SUCCESS(200, "success"),//成功
     // 4xx为客户端错误
     FAIL(400, "request not valid"),//失败,客户端不合法
@@ -18,7 +18,7 @@ public enum ResponseCodeEnum {
     private final int code;
     private final String msg;
 
-    ResponseCodeEnum(int code, String msg) {
+    ResultCodeEnum(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }
@@ -31,8 +31,8 @@ public enum ResponseCodeEnum {
         return msg;
     }
 
-    public <T> Response<T> response() {
-        return new Response<>(this);
+    public <T> Result<T> response() {
+        return new Result<>(this);
     }
 
 

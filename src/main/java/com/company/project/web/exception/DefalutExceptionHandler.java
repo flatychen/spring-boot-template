@@ -1,6 +1,6 @@
 package com.company.project.web.exception;
 
-import com.company.project.base.Response;
+import com.company.project.base.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -32,9 +32,9 @@ public class DefalutExceptionHandler {
      */
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Response<? extends Object> notFound(
+    public Result<? extends Object> notFound(
             Exception ex) {
-        return Response.fail("404 not found");
+        return Result.fail("404 not found");
     }
 
 
@@ -46,10 +46,10 @@ public class DefalutExceptionHandler {
      */
     @ExceptionHandler(Throwable.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Response<? extends Object> handleException(
+    public Result<? extends Object> handleException(
             Exception ex) {
         log.error("Exception", ex);
-        return Response.serverError();
+        return Result.serverError();
     }
 
     /**
@@ -59,10 +59,10 @@ public class DefalutExceptionHandler {
      * @return
      */
     @ExceptionHandler(value = {BindException.class, MissingServletRequestParameterException.class})
-    public Response<? extends Object> requestNotValid(
+    public Result<? extends Object> requestNotValid(
             Exception ex) {
         log.error("BindException:{}", ex.getMessage());
-        return Response.fail(ex.getMessage());
+        return Result.fail(ex.getMessage());
     }
 
 
