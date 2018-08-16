@@ -1,4 +1,4 @@
-package com.company.project.web.aop;
+package com.company.project.aop;
 
 /**
  * Created by flaty on 2017-01-10.

@@ -1,7 +1,7 @@
-package com.company.project.web.aop;
+package com.company.project.aop;
 
 import com.alibaba.fastjson.JSON;
-import com.company.project.utils.web.WebUtil;
+import com.company.project.utils.Util;
 import com.google.common.base.Stopwatch;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -34,7 +34,7 @@ public class LogControllerAspect {
     @Around("execution(* com.company.project.web.controller..*(..))")
     public Object requestPointCut(ProceedingJoinPoint pjp)
             throws Throwable {
-        String requestIp = WebUtil.getRealIpAddr(request);
+        String requestIp = Util.getRealIpAddr(request);
         logRequestLog(requestIp);
         Stopwatch watch = Stopwatch.createStarted();
         Object result = pjp.proceed();
@@ -49,7 +49,7 @@ public class LogControllerAspect {
     public Object exceptionPointCut(ProceedingJoinPoint pjp)
             throws Throwable {
         Object result = pjp.proceed();
-        log.error("error [{}:{}],request:{},response <= {} ", WebUtil.getRealIpAddr(request), request.getServletPath
+        log.error("error [{}:{}],request:{},response <= {} ", Util.getRealIpAddr(request), request.getServletPath
                 (), JSON.toJSONString
                 (request.getParameterMap()), result);
         return result;
