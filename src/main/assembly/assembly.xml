@@ -8,15 +8,6 @@
 	<formats>
 		<format>zip</format>
 	</formats>
-	<!--<dependencySets>-->
-		<!--<dependencySet>-->
-			<!--<useProjectArtifact>true</useProjectArtifact>-->
-			<!--<outputDirectory>/</outputDirectory>-->
-			<!--<includes>-->
-				<!--<include>${project.groupId}:${project.artifactId}</include>-->
-			<!--</includes>-->
-		<!--</dependencySet>-->
-	<!--</dependencySets>-->
 	<fileSets>
 		<fileSet>
 			<directory>src/main/resources</directory>
