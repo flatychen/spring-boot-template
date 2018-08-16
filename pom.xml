@@ -170,6 +170,15 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
+
+
+                    <!-- conf为所有的配置文件classpath -->
+                    <archive>
+                        <manifestEntries>
+                            <Class-Path>./conf/</Class-Path>
+                        </manifestEntries>
+                    </archive>
+
                     <excludes>
                         <exclude>**/application*.yml</exclude>
                         <exclude>**/application*.yaml</exclude>
