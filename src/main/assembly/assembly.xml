@@ -10,30 +10,23 @@
 	</formats>
 	<fileSets>
 		<fileSet>
-			<directory>src/main/resources</directory>
-			<outputDirectory>/</outputDirectory>
-			<includes>
-				<include>*.yml</include>
-				<include>*.yaml</include>
-				<include>*log*.xml</include>
-				<include>*.properties</include>
-			</includes>
-		</fileSet>
-		<fileSet>
 			<directory>${project.build.directory}</directory>
-			<outputDirectory>/</outputDirectory>
+			<outputDirectory>/conf</outputDirectory>
 			<includes>
 				<include>${project.artifactId}-${project.version}_${timestamp}.jar</include>
 			</includes>
 		</fileSet>
 		<fileSet>
 			<directory>src/main/resources</directory>
-			<outputDirectory>/</outputDirectory>
+			<outputDirectory>/conf</outputDirectory>
 			<includes>
 				<include>*.yml</include>
 				<include>*.yaml</include>
-				<include>*log*.xml</include>
+				<include>*.xml</include>
 				<include>*.properties</include>
+				<include>spring/*</include>
+				<include>resource/*</include>
+				<include>mapper/*</include>
 			</includes>
 		</fileSet>
 		<fileSet>

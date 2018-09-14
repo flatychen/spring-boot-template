@@ -47,7 +47,6 @@
         </dependency>
 
 
-
         <!--常用库依赖-->
 
         <dependency>
@@ -70,11 +69,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.6</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>23.0</version>
         </dependency>
         <!--MySQL JDBC驱动-->
         <dependency>
@@ -107,12 +101,10 @@
         </dependency>
 
 
-
-
         <dependency>
             <groupId>com.vip.vjtools</groupId>
             <artifactId>vjkit</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.5</version>
         </dependency>
 
 

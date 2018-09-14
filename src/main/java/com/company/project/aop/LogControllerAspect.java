@@ -57,7 +57,7 @@ public class LogControllerAspect {
 
 
     private void logRequestLog(String requestIp) {
-        MDC.put("traceId", UUID.randomUUID().toString());
+        MDC.put("requestId", UUID.randomUUID().toString());
         log.info("[{}:{}],request  => {}", requestIp, request.getServletPath(), JSON.toJSONString
                 (request.getParameterMap()));
     }

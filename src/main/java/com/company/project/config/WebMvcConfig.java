@@ -1,5 +1,6 @@
 package com.company.project.config;
 
+import com.company.project.web.interceptor.CROSHandlerInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 //            registry.addInterceptor()
+        registry.addInterceptor(new CROSHandlerInterceptor()).addPathPatterns("/**");
     }
 
 
