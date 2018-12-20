@@ -1,0 +1,9 @@
+[Unit]
+Description=java-app
+
+[Service]
+ExecStart/data/servers/miniprogram/groupon-apilitemall-wx-api-0.1.0_2018-12-19-15.11.09-exec.jar
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target

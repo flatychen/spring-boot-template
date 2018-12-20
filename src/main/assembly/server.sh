@@ -5,7 +5,7 @@ Xms=1024m
 Xmn=512m
 PermSize=256m
 MaxPermSize=512m
-pid=${name}".pid"
+pid="pid"
 logName="all"
 jarName=`ls | grep -e "^\${name}.*jar$" | sort -r | head -n 1`
 
