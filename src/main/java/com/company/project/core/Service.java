@@ -15,14 +15,14 @@ public interface Service<T> {
 
     void deleteById(Integer id);//通过主鍵刪除
 
-    void deleteByIds(String ids);//批量刪除 eg：ids -> “1,2,3,4”
+    void deleteByIds(List<Integer> ids);//批量刪除 eg：ids -> “1,2,3,4”
 
     void update(T model);//更新
 
     T getById(Integer id);//通过ID查找
 
 
-    List<T> findByIds(String ids);//通过多个ID查找//eg：ids -> “1,2,3,4”
+    List<T> findByIds(List<Object> ids);//通过多个ID查找//eg：ids -> “1,2,3,4”
 
     List<T> findByCondition(Condition condition);//根据条件查找
 

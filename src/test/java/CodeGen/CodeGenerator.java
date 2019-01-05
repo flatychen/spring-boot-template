@@ -18,15 +18,15 @@ import java.util.*;
  */
 public class CodeGenerator {
     //JDBC配置，请修改为你项目的实际配置
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/client_data";
-    private static final String JDBC_USERNAME = "root";
+    private static final String JDBC_URL = "jdbc:mysql://mysql.m.aomygod.api:3306/aoyuejia_h5";
+    private static final String JDBC_USERNAME = "dev";
     private static final String JDBC_PASSWORD = "123456";
     private static final String JDBC_DIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
     public static final String BASE_PACKAGE = "com.company.project";//项目基础包名称，根据自己公司的项目修改
 
 
     public static void main(String[] args) {
-        Gen.getInstance().genCode("c_app");
+        Gen.getInstance().genCode("lucky_bag");
 //        Gen.getInstance().genCode("bbb", "xxx");
 //        Gen.getInstance().genCodeByCustomModelName("输入表名", "输入自定义Model名称");
     }

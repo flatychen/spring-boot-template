@@ -1,6 +1,8 @@
 package com.company.project.core;
 
 
+import com.company.project.core.join.ServiceJoinable;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.entity.Condition;
 
@@ -10,7 +12,7 @@ import java.util.List;
 /**
  * 基于通用MyBatis Mapper插件的Service接口的实现
  */
-public abstract class AbstractService<T> implements Service<T> {
+public abstract class AbstractService<T> implements Service<T>, ServiceJoinable<T> {
 
     @Autowired
     protected MyMapper<T> mapper;
@@ -34,8 +36,8 @@ public abstract class AbstractService<T> implements Service<T> {
         mapper.deleteByPrimaryKey(id);
     }
 
-    public void deleteByIds(String ids) {
-        mapper.deleteByIds(ids);
+    public void deleteByIds(List<Integer> ids) {
+        mapper.deleteByIds(StringUtils.join(ids,","));
     }
 
     public void update(T model) {
@@ -47,8 +49,8 @@ public abstract class AbstractService<T> implements Service<T> {
     }
 
 
-    public List<T> findByIds(String ids) {
-        return mapper.selectByIds(ids);
+    public List<T> findByIds(List<Object> ids) {
+        return mapper.selectByIds(StringUtils.join(ids,","));
     }
 
     public List<T> findByCondition(Condition condition) {
