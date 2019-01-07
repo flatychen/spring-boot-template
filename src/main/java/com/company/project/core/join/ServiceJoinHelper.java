@@ -22,65 +22,101 @@ public class ServiceJoinHelper {
 //    private ConcurrentMap<Class,>
 
 
-    public static <S, T> void join(Class<S> clazz, List<S> beans, ServiceJoinable ... serviceJoinables) throws IllegalAccessException {
+    public static <S, T> void join(Class<S> clazz, List<S> beans, ServiceJoinable... serviceJoinables) throws IllegalAccessException {
         Stopwatch stopwatch = Stopwatch.createStarted();
         Validate.notNull(beans, "beans不能为空");
         Validate.notNull(clazz, "clazz不能为空");
         Validate.notEmpty(beans, "beans不能为空");
         Validate.notNull(serviceJoinables, "serviceJoinable不能为空");
 
-        // fixme 可以缓存
+        // 查询目标field  fixme 可以缓存
         List<Field> targetFields = sortTargetField(clazz);
 
 
-        // 检查注解是否为空
+        //  检查注解是否为空
         if (CollectionUtils.isEmpty(targetFields)) {
             log.warn("@JoinField 无属性");
             return;
         }
 
-        // fixme 可以缓存
-        List<Field> sourceFields =  reflectSourceFields(clazz, targetFields);
+        // 查询源field ,与上述目标保持一致 fixme 可以缓存
+        List<Field> sourceFields = reflectSourceFields(clazz, targetFields);
 
-        Map<Integer,List<Object>> sourceValues =Maps.newHashMap();
+        Map<Field, Field> targetMapSourceField = targetMapSourceField(sourceFields, targetFields);
+
+        Map<Field, List<Object>> sourceValues = Maps.newHashMap();
+
+        Map<BeanField<S>, Object> beanFieldListMap = Maps.newHashMap();
+
+        // 获取源字段值的列表
+        for (Field sourceField : sourceFields) {
+            List<Object> values = Lists.newArrayList();
+            for (S bean : beans) {
+                Object sourceVal = FieldUtils.readField(sourceField, bean);
+                values.add(sourceVal);
+                beanFieldListMap.put(new BeanField<>(sourceField, bean), sourceVal);
+            }
+            sourceValues.put(sourceField, values);
+        }
+
+
+//        return sourceValues;
+//        Map<Field, List<Object>> sourceValues = getSourceFieldValues(beans, sourceFields);
+
+        log.info("{}", sourceValues);
+
+        Map<Field, List<Object>> targetValues = Maps.newHashMap();
+        for (int i = 0; i < serviceJoinables.length; i++) {
+            Field targetField = targetFields.get(i);
+            ServiceJoinable serviceJoinable = serviceJoinables[i];
+            List<Object> list = serviceJoinable.findByIds(sourceValues.get(i));
+            targetValues.put(targetField, list);
+        }
+
+
+        Map<BeanField<S>, Object> targetFieldListMap = Maps.newHashMap();
+
+
+        log.info("{}", targetValues);
+
+        for (S bean : beans) {
+            for (Field targetField : targetFields) {
+                Field sourceFiled = targetMapSourceField.get(targetField);
+                List<Object> onetargetValues = targetValues.get(targetField);
+                // how
+                FieldUtils.writeField(targetField, bean, onetargetValues.get(0));
+            }
+        }
+
+        log.info("ServiceJoinHelper join use time:{}", stopwatch.toString());
+    }
+
+    private static Map<Field, Field> targetMapSourceField(List<Field> sourceFields, List<Field> targetFields) {
+        Map<Field, Field> fieldFieldMap = Maps.newHashMap();
+        for (int i = 0; i < targetFields.size(); i++) {
+            fieldFieldMap.put(targetFields.get(i), sourceFields.get(i));
+        }
+        return fieldFieldMap;
+    }
+
+    private static <S> Map<Field, List<Object>> getSourceFieldValues(List<S> beans, List<Field> sourceFields) throws IllegalAccessException {
+        Map<Field, List<Object>> sourceValues = Maps.newHashMap();
 
         // 获取源字段值的列表
         for (int i = 0; i < sourceFields.size(); i++) {
             Field sourceField = sourceFields.get(i);
-            Field targetField = targetFields.get(i);
             List<Object> values = Lists.newArrayList();
 
             for (S bean : beans) {
                 Object sourceVal = FieldUtils.readField(sourceField, bean);
                 values.add(sourceVal);
             }
-            sourceValues.put(i, values);
-
+            sourceValues.put(sourceField, values);
         }
-
-        log.info("{}",sourceValues);
-
-
-        Map<Field,List<Object>> targetValues =Maps.newHashMap();
-
-        for (int i = 0; i < serviceJoinables.length; i++) {
-            Field targetField = targetFields.get(i);
-            ServiceJoinable serviceJoinable = serviceJoinables[i];
-            List<Object> list = serviceJoinable.findByIds(sourceValues.get(i));
-            targetValues.put(targetField, list);
-//            for (S bean : beans) {
-//                Object sourceVal = FieldUtils.writeField(bean,targetField, );
-//                values.add(sourceVal);
-//            }
-
-        }
-
-        log.info("{}",targetValues);
-
+        return sourceValues;
     }
 
     /**
-     *
      * 反射得到源bean字段列表
      *
      * @param clazz
@@ -93,7 +129,7 @@ public class ServiceJoinHelper {
         List<Field> sourceFields = Lists.newArrayList();
         for (Field targetField : targetFields) {
             JoinField joinField = targetField.getAnnotation(JoinField.class);
-            Field sourceField = FieldUtils.getDeclaredField(clazz, joinField.sourcefield(),true);
+            Field sourceField = FieldUtils.getDeclaredField(clazz, joinField.sourcefield(), true);
             if (sourceField == null) {
                 log.warn("@JoinField sourcefield:{} 不存在", joinField.sourcefield());
                 throw new IllegalArgumentException();
@@ -119,6 +155,26 @@ public class ServiceJoinHelper {
             return new Integer(j1.order()).compareTo(new Integer(j2.order()));
         });
         return fields;
+    }
+
+
+    public static class BeanField<T> {
+        private Field field;
+        private T t;
+
+
+        public BeanField(Field field, T t) {
+            this.field = field;
+            this.t = t;
+        }
+
+        public Field getField() {
+            return field;
+        }
+
+        public T getT() {
+            return t;
+        }
     }
 
 
