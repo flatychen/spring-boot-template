@@ -10,14 +10,21 @@ public @interface JoinField {
 
 
     /**
-     * 用于
+     * 用于bean关联的源字段，
      *
      * @return
      */
-    String sourcefield() default "id";
+    String sourceField() default "id";
 
     /**
-     * 用于
+     * 用于关联其它表时的字段，一般默认为id
+     *
+     * @return
+     */
+    String customOuterField() default "id";
+
+    /**
+     * 用于排序
      *
      * @return
      */

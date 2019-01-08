@@ -18,7 +18,7 @@ import java.util.*;
  */
 public class CodeGenerator {
     //JDBC配置，请修改为你项目的实际配置
-    private static final String JDBC_URL = "jdbc:mysql://mysql.m.aomygod.api:3306/aoyuejia_h5";
+    private static final String JDBC_URL = "jdbc:mysql://mysql.m.aomygod.api:3306/litemall";
     private static final String JDBC_USERNAME = "dev";
     private static final String JDBC_PASSWORD = "123456";
     private static final String JDBC_DIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
@@ -26,7 +26,9 @@ public class CodeGenerator {
 
 
     public static void main(String[] args) {
-        Gen.getInstance().genCode("lucky_bag");
+//        Gen.getInstance().genCode("lucky_bag");
+//        Gen.getInstance().genCode("litemall_goods","litemall_goods_product");
+        Gen.getInstance().genCode("litemall_brand","litemall_category");
 //        Gen.getInstance().genCode("bbb", "xxx");
 //        Gen.getInstance().genCodeByCustomModelName("输入表名", "输入自定义Model名称");
     }
@@ -54,7 +56,7 @@ public class CodeGenerator {
         public static final String SERVICE_IMPL_PACKAGE = SERVICE_PACKAGE + ".impl";//ServiceImpl所在包
         public static final String CONTROLLER_PACKAGE = BASE_PACKAGE + ".web.controller";//Controller所在包
 
-        public static final String MAPPER_INTERFACE_REFERENCE = BASE_PACKAGE + ".core.Mapper";//Mapper插件基础接口的完全限定名
+        public static final String MAPPER_INTERFACE_REFERENCE = BASE_PACKAGE + ".core.MyMapper";//Mapper插件基础接口的完全限定名
         private static final String PROJECT_PATH = System.getProperty("user.dir");//项目在硬盘上的基础路径
         private static final String TEMPLATE_FILE_PATH = PROJECT_PATH + "/src/test/resources/generator/template";//模板位置
 

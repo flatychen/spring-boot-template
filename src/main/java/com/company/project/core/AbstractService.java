@@ -49,8 +49,13 @@ public abstract class AbstractService<T> implements Service<T>, ServiceJoinable<
     }
 
 
-    public List<T> findByIds(List<Object> ids) {
-        return mapper.selectByIds(StringUtils.join(ids,","));
+    public List<T> findByIds(List<Integer> ids) {
+        return mapper.selectByIds(StringUtils.join(ids.toArray(),","));
+    }
+
+    @Override
+    public List<T> selectList(T model) {
+        return mapper.select(model);
     }
 
     public List<T> findByCondition(Condition condition) {

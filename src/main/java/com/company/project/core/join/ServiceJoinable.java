@@ -7,6 +7,6 @@ import java.util.List;
  */
 public interface ServiceJoinable<T> {
 
-    List<T> findByIds(List<Object> ids);
+    List<T> findByIds(List<Integer> ids);
 
 }

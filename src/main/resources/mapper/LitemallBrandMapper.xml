@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.project.dao.LitemallBrandMapper">
+  <resultMap id="BaseResultMap" type="com.company.project.model.LitemallBrand">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="desc" jdbcType="VARCHAR" property="desc" />
+    <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
+    <result column="sort_order" jdbcType="TINYINT" property="sortOrder" />
+    <result column="floor_price" jdbcType="DECIMAL" property="floorPrice" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="deleted" jdbcType="BIT" property="deleted" />
+  </resultMap>
+</mapper>

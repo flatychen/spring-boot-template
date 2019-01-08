@@ -14,7 +14,7 @@ public class LuckyBag {
     @Column(name = "agency_id")
     private Integer agencyId;
 
-    @JoinField(sourcefield = "id")
+    @JoinField(sourceField = "id")
     public LuckyBag luckyBag;
 
 
