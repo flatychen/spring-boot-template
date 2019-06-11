@@ -35,6 +35,11 @@ public class ServiceJoinHelper {
         Validate.notEmpty(beans, "beans不能为空");
         Validate.notNull(serviceJoinables, "serviceJoinables不能为空");
 
+
+        if (CollectionUtils.isEmpty(beans)) {
+            return;
+        }
+
         // 1. 查询目标bean中的field，并且排序  fixme 可以缓存
         List<Field> targetFields = prepareTargetField(clazz);
 
