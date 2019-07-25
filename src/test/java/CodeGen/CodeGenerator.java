@@ -95,7 +95,7 @@ public class CodeGenerator {
 
             // 计算前缀
             if (StringUtils.isNotEmpty(TABLE_PREFIX)) {
-                modelName = StringUtils.substringAfter(tableName, TABLE_PREFIX);
+                modelName = tableNameConvertUpperCamel(StringUtils.substringAfter(tableName, TABLE_PREFIX));
             }
 
             genModelAndMapper(tableName, modelName);
