@@ -3,15 +3,14 @@ package com.company.project.core.join;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -22,7 +21,7 @@ import java.util.concurrent.ConcurrentMap;
 public class ServiceJoinHelper {
 
 
-    private static final int DEFALUT_LIST_SIZE = 16;
+    private static final int DEFALUT_SIZE = 64;
 
 
     private static ConcurrentMap<Field, JoinField> targetJoinFieldConcurrentMap = new ConcurrentHashMap<>();
@@ -58,7 +57,7 @@ public class ServiceJoinHelper {
         Map<Field, Field> targetFieldToSourceFieldMap = buildTargetAndSourceMap(sourceFields, targetFields);
 
         // 4. 通过反射得到源field 的值列表，注意 sourceFieldValueMap 用于后期快速查找
-        Map<BeanField<S>, Object> sourceFieldValueMap = Maps.newHashMapWithExpectedSize(DEFALUT_LIST_SIZE);
+        Map<BeanField<S>, Object> sourceFieldValueMap = Maps.newHashMapWithExpectedSize(DEFALUT_SIZE);
         Map<Field, List<Integer>> sourceValues = reflectAndBuildSourceFieldValues(beans, sourceFields, sourceFieldValueMap);
 
 
@@ -87,7 +86,7 @@ public class ServiceJoinHelper {
     }
 
     private static Map<BeanField, Object> buildTargetFieldValuesMap(List<Field> targetFields, Map<Field, List<Object>> targetValues) {
-        Map<BeanField, Object> targetFieldValueMap = Maps.newHashMapWithExpectedSize(DEFALUT_LIST_SIZE);
+        Map<BeanField, Object> targetFieldValueMap = Maps.newHashMapWithExpectedSize(DEFALUT_SIZE);
         targetValues.forEach((targetField, oneTargetFieldValues) -> {
             Field targetIdField = getOuterTargetField(targetField,oneTargetFieldValues);
             for (Object oneTargetFieldValue : oneTargetFieldValues) {
@@ -111,10 +110,10 @@ public class ServiceJoinHelper {
     }
 
     private static <S> Map<Field, List<Integer>> reflectAndBuildSourceFieldValues(List<S> beans, List<Field> sourceFields, Map<BeanField<S>, Object> sourceFieldValueMap) {
-        Map<Field, List<Integer>> sourceValues = Maps.newHashMapWithExpectedSize(DEFALUT_LIST_SIZE);
+        Map<Field, List<Integer>> sourceValues = Maps.newHashMapWithExpectedSize(DEFALUT_SIZE);
         // 4. 获取源field字段值的列表
         for (Field sourceField : sourceFields) {
-            List<Integer> values = Lists.newArrayListWithCapacity(DEFALUT_LIST_SIZE);
+            Set<Integer> values = Sets.newHashSetWithExpectedSize(DEFALUT_SIZE);
             for (S bean : beans) {
                 Object sourceVal = null;
                 try {
@@ -125,7 +124,7 @@ public class ServiceJoinHelper {
                 values.add(new Integer(sourceVal.toString()));
                 sourceFieldValueMap.put(new BeanField<>(sourceField, bean), sourceVal);
             }
-            sourceValues.put(sourceField, values);
+            sourceValues.put(sourceField, new ArrayList<>(values));
         }
         return sourceValues;
     }
@@ -140,7 +139,7 @@ public class ServiceJoinHelper {
      * @return
      */
     private static Map<Field, List<Object>> fetchTargetFieldValues(List<Field> targetFields, Map<Field, Field> targetFieldToSourceFieldMap, Map<Field, List<Integer>> sourceValues, ServiceJoinable[] serviceJoinables) {
-        Map<Field, List<Object>> targetValues = Maps.newHashMapWithExpectedSize(DEFALUT_LIST_SIZE);
+        Map<Field, List<Object>> targetValues = Maps.newHashMapWithExpectedSize(DEFALUT_SIZE);
         for (int i = 0; i < serviceJoinables.length; i++) {
             Field targetField = targetFields.get(i);
             Field sourceField = targetFieldToSourceFieldMap.get(targetField);
@@ -162,7 +161,7 @@ public class ServiceJoinHelper {
      * @return
      */
     private static Map<Field, Field> buildTargetAndSourceMap(List<Field> sourceFields, List<Field> targetFields) {
-        Map<Field, Field> fieldFieldMap = Maps.newHashMapWithExpectedSize(DEFALUT_LIST_SIZE);
+        Map<Field, Field> fieldFieldMap = Maps.newHashMapWithExpectedSize(DEFALUT_SIZE);
         for (int i = 0; i < targetFields.size(); i++) {
             fieldFieldMap.put(targetFields.get(i), sourceFields.get(i));
         }
@@ -180,7 +179,7 @@ public class ServiceJoinHelper {
      */
     private static <S> List<Field> reflectSourceFields(Class<S> clazz, List<Field> targetFields) {
         // 通过目标filed获取来源field
-        List<Field> sourceFields = Lists.newArrayListWithCapacity(DEFALUT_LIST_SIZE);
+        List<Field> sourceFields = Lists.newArrayListWithCapacity(DEFALUT_SIZE);
         for (Field targetField : targetFields) {
             JoinField joinField =  targetJoinFieldConcurrentMap.get(targetField);
             Field sourceField = FieldUtils.getDeclaredField(clazz, joinField.sourceField(), true);
