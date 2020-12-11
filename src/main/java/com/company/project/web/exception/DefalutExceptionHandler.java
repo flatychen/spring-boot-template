@@ -21,8 +21,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @RestController
 public class DefalutExceptionHandler {
 
-    private static Logger log = LoggerFactory
-            .getLogger(DefalutExceptionHandler.class);
+    private static Logger log = LoggerFactory.getLogger(DefalutExceptionHandler.class);
 
     /**
      * 添加404
@@ -32,8 +31,7 @@ public class DefalutExceptionHandler {
      */
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Result<? extends Object> notFound(
-            Exception ex) {
+    public Result<? extends Object> notFound(Exception ex) {
         return Result.fail("404 not found");
     }
 
@@ -46,8 +44,7 @@ public class DefalutExceptionHandler {
      */
     @ExceptionHandler(Throwable.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Result<? extends Object> handleException(
-            Exception ex) {
+    public Result<? extends Object> handleException(Exception ex) {
         log.error("Exception", ex);
         return Result.serverError();
     }
@@ -59,8 +56,7 @@ public class DefalutExceptionHandler {
      * @return
      */
     @ExceptionHandler(value = {BindException.class, MissingServletRequestParameterException.class})
-    public Result<? extends Object> requestNotValid(
-            Exception ex) {
+    public Result<? extends Object> requestNotValid(Exception ex) {
         log.error("BindException:{}", ex.getMessage());
         return Result.fail(ex.getMessage());
     }
